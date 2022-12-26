@@ -174,4 +174,3 @@ def test_tag_css() -> None:
         '.tag[href$="/tags/def/"], .tag[href="#def"] '
         "{ --tag-group: var(--tag-group-abc); }"
     ) in result.stdout
-    print(result.stdout)
