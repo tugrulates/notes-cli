@@ -31,7 +31,7 @@ html[data-theme="light"] {
 
 {#- tag colors #}
 {% for tag in tags %}
-.tag[href$="/tags/{{ tag.name }}/"], .tag[href="#{{ tag.name }}"] { --tag-group: var(--tag-group-{{ tag.group }}); }
+.tag[href$="/tags/{{ tag.name | trim('#') }}/"], .tag[href="{{ tag.name }}"] { --tag-group: var(--tag-group-{{ tag.group }}); }
 {%- endfor %}
 
 .tag,

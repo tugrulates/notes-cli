@@ -94,7 +94,7 @@ def list_tags(
 ) -> None:
     """List tags."""
     for tag in get_vault().tags(pattern):
-        console.print(tag)
+        console.print(tag.name)
 
 
 @tag.command(name="css")
