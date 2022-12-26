@@ -6,7 +6,7 @@ import re
 from dataclasses import dataclass, field
 from datetime import date
 from enum import Enum
-from functools import cached_property, total_ordering
+from functools import cached_property
 from itertools import chain
 from pathlib import Path
 from typing import Any, Dict, Iterator, List, Optional
@@ -73,43 +73,12 @@ class State(Enum):
     PUBLIC = 4
 
 
-@total_ordering
+@dataclass(frozen=True, order=True, repr=False)
 class Tag:
     """A tag on a note."""
 
-    def __init__(self, name: str, group: str):
-        """Initialize tag with its group."""
-        self._name = name.lstrip("#")
-        self._group = group.lstrip("#")
-
-    @property
-    def name(self) -> str:
-        """Return the name of the without the leading hashtag."""
-        return self._name
-
-    @property
-    def group(self) -> str:
-        """Return the kebab-case color of the tag."""
-        return self._group
-
-    def css(self) -> str:
-        """Return styling selector for tag."""
-        return (
-            f'.tag[href$="/{self.name}"], .tag[href="#{self.name}"] '
-            f"{{ --tag-group: var(--tag-group-{self.group}); }}"
-        )
-
-    def __lt__(self, obj: Tag) -> bool:
-        """Compare tags by name."""
-        return (self.name) < (obj.name)
-
-    def __str__(self) -> str:
-        """Tag name with hashtag prepended."""
-        return f"#{self.name}"
-
-    def __repr__(self) -> str:
-        """Tag object repr."""
-        return f'Tag("#{self.name}", "#{self.group}")'
+    name: str
+    group: str = field(repr=False)
 
 
 class Note:
@@ -183,7 +152,8 @@ class Note:
         meta_tags = self.meta.get("tags")
         if not isinstance(meta_tags, list):
             return []
-        return [tag for tag in self.vault.all_tags if tag.name in meta_tags]
+        tag_names = {f"#{x}" for x in meta_tags}
+        return [tag for tag in self.vault.all_tags if tag.name in tag_names]
 
     @cached_property
     def tables(self) -> List[Table]:

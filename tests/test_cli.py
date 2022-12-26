@@ -168,6 +168,9 @@ def test_tag_list_with_missing_pattern() -> None:
 
 def test_tag_css() -> None:
     """Test listing tags in vault."""
-    result = runner.invoke(cli.app, "tag css")
+    result = runner.invoke(cli.app, "tag css --no-rich")
     assert result.exit_code == 0
-    assert "var(--tag-group-abc)" in result.stdout
+    assert (
+        '.tag[href$="/tags/def/"], .tag[href="#def"] '
+        "{ --tag-group: var(--tag-group-abc); }"
+    ) in result.stdout
