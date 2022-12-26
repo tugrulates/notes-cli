@@ -5,7 +5,8 @@ from typing import Iterator, Optional
 
 import typer
 from jinja2 import Environment, PackageLoader, select_autoescape
-from rich import print
+from rich.console import Console
+from rich.syntax import Syntax
 
 from notes import config
 from notes.models import Vault
@@ -21,6 +22,7 @@ app.add_typer(
 )
 cfg = config.load()
 templates = Environment(loader=PackageLoader("notes"), autoescape=select_autoescape())
+console = Console()
 
 
 def get_vault() -> Vault:
@@ -81,7 +83,7 @@ def list_notes(
 ) -> None:
     """List notes."""
     for note in get_vault().notes(pattern):
-        print(note)
+        console.print(note)
 
 
 @tag.command(name="list")
@@ -90,21 +92,24 @@ def list_tags(
 ) -> None:
     """List tags."""
     for tag in get_vault().tags(pattern):
-        print(tag)
+        console.print(tag)
 
 
 @tag.command(name="css")
 def generate_tag_css(
     pattern: Path = PatternArg,
     *,
+    rich: bool = True,
     output: Optional[Path] = None,
 ) -> None:
     """Output stylesheet for tags."""
     result = templates.get_template("tag.css").render(tags=get_vault().tags(pattern))
     if output:
         output.write_text(result, encoding="utf-8")
+    elif rich:
+        console.print(Syntax(result, "css", line_numbers=True))
     else:
-        print(result.replace("[", r"\["))
+        print(result)
 
 
 @blog.command("css")
