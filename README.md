@@ -1,6 +1,7 @@
 # notes-cli
 
 [![CI](https://github.com/tugrulates/notes-cli/actions/workflows/ci.yml/badge.svg)](https://github.com/tugrulates/notes-cli/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/tugrulates/notes-cli/branch/main/graph/badge.svg?token=0KC0134YQK)](https://codecov.io/gh/tugrulates/notes-cli)
 
 A CLI tool to manage a repository of markdown files.
 
