@@ -4,9 +4,10 @@ from pathlib import Path
 from typing import Iterator, Optional
 
 import typer
+from jinja2 import Environment, PackageLoader, select_autoescape
 from rich import print
 
-from notes import config, template
+from notes import config
 from notes.models import Vault
 
 app = typer.Typer(help=__doc__)
@@ -19,6 +20,7 @@ app.add_typer(
     obsidian, name="obsidian", help="Manage Obsidian.", rich_help_panel="Modules"
 )
 cfg = config.load()
+templates = Environment(loader=PackageLoader("notes"), autoescape=select_autoescape())
 
 
 def get_vault() -> Vault:
@@ -94,17 +96,15 @@ def list_tags(
 @tag.command(name="css")
 def generate_tag_css(
     pattern: Path = PatternArg,
+    *,
     output: Optional[Path] = None,
 ) -> None:
     """Output stylesheet for tags."""
-    tagcolors = "\n".join(tag.css() for tag in get_vault().tags(pattern))
-    result = template.generate(
-        "tag.css",
-        Path(output) if output else None,
-        tagcolors=tagcolors,
-    )
-    if result:
-        print(result)
+    result = templates.get_template("tag.css").render(tags=get_vault().tags(pattern))
+    if output:
+        output.write_text(result, encoding="utf-8")
+    else:
+        print(result.replace("[", r"\["))
 
 
 @blog.command("css")
@@ -127,7 +127,7 @@ def generate_blog_css(
 @obsidian.command(name="css")
 def generate_obsidian_css() -> None:
     """Generate css styles for tags."""
-    generate_tag_css(output=cfg.vault / ".obsidian/snippets/tag.css")
+    generate_tag_css(Path("*"), output=cfg.vault / ".obsidian/snippets/tag.css")
 
 
 if __name__ == "__main__":

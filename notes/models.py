@@ -94,6 +94,10 @@ class Tag:
 
     def css(self) -> str:
         """Return styling selector for tag."""
+        print(
+            f'.tag[href$="/{self.name}"], .tag[href="#{self.name}"] '
+            f"{{ --tag-group: var(--tag-group-{self.group}); }}"
+        )
         return (
             f'.tag[href$="/{self.name}"], .tag[href="#{self.name}"] '
             f"{{ --tag-group: var(--tag-group-{self.group}); }}"

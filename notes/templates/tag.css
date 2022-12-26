@@ -29,7 +29,10 @@ html[data-theme="light"] {
     --tag-text-color: hsl(240, 0%, 10%);
 }
 
-{{ tagcolors }}
+{#- tag colors #}
+{% for tag in tags %}
+.tag[href$="/tags/{{ tag.name }}/"], .tag[href="#{{ tag.name }}"] { --tag-group: var(--tag-group-{{ tag.group }}); }
+{%- endfor %}
 
 .tag,
 .frontmatter .tag,
