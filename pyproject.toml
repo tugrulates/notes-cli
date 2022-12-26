@@ -7,7 +7,7 @@ name = "notes-cli"
 version = "0.0.1"
 description = 'Manage markdown notes'
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.6"
 license = "MIT"
 keywords = ["writing"]
 authors = [{ name = "Tugrul Ates", email = "me@tugrulates.com" }]
@@ -23,6 +23,7 @@ dependencies = [
   "markdown-it-py[plugins]==2.1.0",
   "pydantic==1.10.2",
   "PyYAML==6.0",
+  "rich==12.6.0",
   "typer[all]==0.7.0",
 ]
 

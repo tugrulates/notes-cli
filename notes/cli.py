@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import Iterator, Optional
 
 import typer
+from rich import print
 
 from notes import config, template
 from notes.models import Vault

@@ -89,14 +89,15 @@ def test_help() -> None:
 def test_vault_missing() -> None:
     """Test that command with no vault fail."""
     result = runner.invoke(cli.app, "--vault missing-dir list")
-    assert result.exit_code != 1
+    assert result.exit_code != 0
+    assert "missing-dir" in result.stdout
 
 
 def test_tags_note_missing() -> None:
     """Test that command with no vault fail."""
     result = runner.invoke(cli.app, "--tags-note missing-dir tag list")
     assert result.exit_code != 0
-    assert "--tags-note" in result.stdout
+    assert "missing-dir" in result.stdout
 
 
 def test_save_vault_to_config() -> None:
