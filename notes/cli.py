@@ -21,7 +21,9 @@ app.add_typer(
     obsidian, name="obsidian", help="Manage Obsidian.", rich_help_panel="Modules"
 )
 cfg = config.load()
-templates = Environment(loader=PackageLoader("notes"), autoescape=select_autoescape())
+templates = Environment(
+    loader=PackageLoader(config.APP), autoescape=select_autoescape()
+)
 console = Console()
 
 
