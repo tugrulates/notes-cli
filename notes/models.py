@@ -92,17 +92,6 @@ class Tag:
         """Return the kebab-case color of the tag."""
         return self._group
 
-    def css(self) -> str:
-        """Return styling selector for tag."""
-        print(
-            f'.tag[href$="/{self.name}"], .tag[href="#{self.name}"] '
-            f"{{ --tag-group: var(--tag-group-{self.group}); }}"
-        )
-        return (
-            f'.tag[href$="/{self.name}"], .tag[href="#{self.name}"] '
-            f"{{ --tag-group: var(--tag-group-{self.group}); }}"
-        )
-
     def __lt__(self, obj: Tag) -> bool:
         """Compare tags by name."""
         return (self.name) < (obj.name)
