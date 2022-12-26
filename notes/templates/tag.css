@@ -1,0 +1,66 @@
+/* Shared with Obsidian */
+
+:root {
+    --tag-group: -1;
+    --tag-group-meta: -1;
+    --tag-group-social: 329;
+    --tag-group-craft: 281;
+    --tag-group-business: 220;
+    --tag-group-world: 177;
+    --tag-group-money: 100;
+    --tag-group-home: 72;
+    --tag-group-language: 49;
+    --tag-group-design: 37;
+    --tag-group-culture: 14;
+    --tag-group-health: 0;
+}
+
+:root {
+    --tag-light-hover: 40%;
+    --tag-light: 20%;
+    --tag-saturation: 40%;
+    --tag-text-color: hsl(240, 0%, 90%);
+}
+
+html[data-theme="light"] {
+    --tag-light-hover: 66%;
+    --tag-light: 85%;
+    --tag-saturation: 90%;
+    --tag-text-color: hsl(240, 0%, 10%);
+}
+
+{{ tagcolors }}
+
+.tag,
+.frontmatter .tag,
+.tag:visited {
+    align-self: flex-start;
+    background-color: hsl(
+        var(--tag-group),
+        calc(var(--tag-saturation) * (1 + min(0, var(--tag-group)))),
+        var(--tag-light)
+    ) !important;
+    border-radius: 18px !important;
+    color: var(--tag-text-color) !important;
+    display: table-cell !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    height: 24px !important;
+    line-height: inherit !important;
+    padding-bottom: 0 !important;
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+    padding-top: 0 !important;
+    text-align: center !important;
+    text-decoration: none !important;
+    vertical-align: middle !important;
+}
+
+.tag:hover,
+.frontmatter .tag:hover {
+    background-color: hsl(
+        var(--tag-group),
+        calc(var(--tag-saturation) * (1 + min(0, var(--tag-group)))),
+        var(--tag-light-hover)
+    ) !important;
+}
