@@ -7,7 +7,7 @@ name = "notes-cli"
 version = "0.0.1"
 description = 'Manage markdown notes'
 readme = "README.md"
-requires-python = ">=3.6"
+requires-python = ">=3.9"
 license = "MIT"
 keywords = ["writing"]
 authors = [{ name = "Tugrul Ates", email = "me@tugrulates.com" }]
@@ -80,7 +80,7 @@ test = [
   "pytest -v",
 ]
 cov = [
-  "pytest -v --cov my_cli --cov-report xml --cov-fail-under=80",
+  "pytest -v --cov notes --cov-report xml --cov-fail-under=80",
 ]
 
 [tool.bandit]
