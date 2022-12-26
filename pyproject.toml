@@ -3,34 +3,38 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "my-cli"
+name = "notes-cli"
 version = "0.0.1"
-description = 'My package description'
+description = 'Manage markdown notes'
 readme = "README.md"
-requires-python = ">=3.7"
+requires-python = ">=3.9"
 license = "MIT"
-keywords = ["mykeywords"]
-authors = [{ name = "My Name", email = "my.email@test.com" }]
+keywords = ["writing"]
+authors = [{ name = "Tugrul Ates", email = "me@tugrulates.com" }]
 classifiers = [
   "Development Status :: 3 - Alpha",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python",
   "Environment :: Console",
+  "Topic :: Text Processing :: Markup :: Markdown",
   "License :: OSI Approved :: MIT License",
 ]
 dependencies = [
+  "markdown-it-py[plugins]==2.1.0",
+  "pydantic==1.10.2",
+  "PyYAML==6.0",
   "typer[all]==0.7.0",
 ]
 
 [project.scripts]
-my-cli = "my_cli.cli:app"
+notes = "notes.cli:app"
 
 [project.urls]
-Homepage = "https://github.com/mygithubuser/mycli"
+Homepage = "https://github.com/tugrulates/notes-cli"
 
 [tool.hatch.build]
 artifacts = [
-  "my-cli/static/**",
+  "notes/templates/**",
 ]
 
 [tool.hatch.envs.dev]
@@ -61,10 +65,10 @@ dependencies = [
 [tool.hatch.envs.default.scripts]
 lint = [
   "flake8 .",
-  "black . --check --diff",
-  "isort . --check-only --diff",
   "mypy . --check-untyped-defs",
   "bandit -qr -c pyproject.toml .",
+  "black . --check --diff",
+  "isort . --check-only --diff",
 ]
 fmt = [
   "isort .",
@@ -72,11 +76,17 @@ fmt = [
   "check",
 ]
 test = [
-  "pytest -v --cov my_cli",
+  "pytest -v",
+]
+cov = [
+  "pytest -v --cov my_cli --cov-report xml --cov-fail-under=80",
 ]
 
 [tool.bandit]
 exclude_dirs = ["tests"]
+
+[tool.mypy]
+strict = true
 
 [tool.isort]
 profile = "black"
