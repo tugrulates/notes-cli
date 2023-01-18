@@ -10,13 +10,14 @@ A CLI tool to manage a repository of markdown files.
 ```shell
 $ git clone https://github.com/tugrulates/notes-cli.git notes-cli
 $ cd notes-cli
-$ pip install .
+$ python -m pip install .
 ```
 
 ## Usage
 
 ```shell
-$ notes list --vault=path/to/notes
+$ notes config --vault=path/to/notes
+$ notes list
 $ notes tags list
 $ notes tags css
 ```
