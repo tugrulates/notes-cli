@@ -100,14 +100,13 @@ def test_tags_note_missing() -> None:
     assert "missing-dir" in result.stdout
 
 
-def test_save_vault_to_config(vault: Path, tmp_path: Path) -> None:
+def test_save_vault_to_config(vault: Path) -> None:
     """Test skipping vault on subsequent invocations."""
-    new_vault = vault.with_suffix(".new")
-    vault.rename(new_vault)
-    result = runner.invoke(cli.app, f"--vault '{new_vault}' list")
+    vault = vault.rename(vault.with_name(vault.name + "-new"))
+    result = runner.invoke(cli.app, f"--vault '{vault}' list")
     assert result.exit_code == 0
     cfg = config.load()
-    assert cfg.vault == new_vault
+    assert cfg.vault == vault
 
 
 def test_note_list() -> None:
