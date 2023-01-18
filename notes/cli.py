@@ -32,6 +32,16 @@ def get_vault() -> Vault:
     return Vault(cfg.vault, tags_note=cfg.tags_note)
 
 
+def set_vault(ctx: typer.Context, vault: Path) -> Path:
+    """Register vault parameter."""
+    if ctx.resilient_parsing:
+        return vault
+    if not vault.is_dir():
+        raise typer.BadParameter(f"Vault '{vault}' does not exist.")
+    cfg.vault = vault
+    return vault
+
+
 def complete_note(incomplete: str) -> Iterator[str]:
     """Return note paths using vault from config for autocompletion."""
     pattern = incomplete
@@ -41,7 +51,7 @@ def complete_note(incomplete: str) -> Iterator[str]:
         yield str(note.name).replace(" ", "\\ ")
 
 
-def validate_note(ctx: typer.Context, param: typer.CallbackParam, note: Path) -> Path:
+def validate_note(ctx: typer.Context, note: Path) -> Path:
     """Validate note parameter."""
     if ctx.resilient_parsing:
         return note
@@ -60,10 +70,12 @@ PatternArg = typer.Argument(
 def main(
     vault: Path = typer.Option(  # noqa: B008
         cfg.vault,
+        is_eager=True,
         prompt=not cfg.vault,
         exists=True,
         file_okay=False,
         help="Vault directory containing notes. Specify at least once.",
+        callback=set_vault,
     ),
     tags_note: Path = typer.Option(  # noqa: B008
         cfg.tags_note,
@@ -74,7 +86,6 @@ def main(
     ),
 ) -> None:
     """Initialize global config."""
-    cfg.vault = vault
     cfg.tags_note = tags_note
     cfg.dump()
 
