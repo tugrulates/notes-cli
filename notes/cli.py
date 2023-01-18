@@ -66,8 +66,8 @@ PatternArg = typer.Argument(
 )
 
 
-@app.callback()
-def main(
+@app.command("config")
+def configure_app(
     vault: Path = typer.Option(  # noqa: B008
         cfg.vault,
         is_eager=True,
@@ -85,9 +85,10 @@ def main(
         callback=validate_note,
     ),
 ) -> None:
-    """Initialize global config."""
+    """Update or print configuration."""
     cfg.tags_note = tags_note
     cfg.dump()
+    console.print_json(cfg.json())
 
 
 @app.command("list")

@@ -2,6 +2,7 @@
 
 
 import importlib
+import json
 from pathlib import Path
 
 import pytest
@@ -86,27 +87,34 @@ def test_help() -> None:
     assert "Usage:" in result.stdout
 
 
-def test_vault_missing() -> None:
-    """Test that command with no vault fail."""
-    result = runner.invoke(cli.app, "--vault missing-dir list")
-    assert result.exit_code != 0
-    assert "missing-dir" in result.stdout
+def test_config_print(vault: Path) -> None:
+    """Test skipping vault on subsequent invocations."""
+    result = runner.invoke(cli.app, "config")
+    assert result.exit_code == 0
+    assert Config(**dict(json.loads(result.stdout))) == config.load()
 
 
-def test_tags_note_missing() -> None:
-    """Test that command with no vault fail."""
-    result = runner.invoke(cli.app, "--tags-note missing-dir tag list")
-    assert result.exit_code != 0
-    assert "missing-dir" in result.stdout
-
-
-def test_save_vault_to_config(vault: Path) -> None:
+def test_config_set_vault(vault: Path) -> None:
     """Test skipping vault on subsequent invocations."""
     vault = vault.rename(vault.with_name(vault.name + "-new"))
-    result = runner.invoke(cli.app, f"--vault '{vault}' list")
+    result = runner.invoke(cli.app, f"config --vault '{vault}'")
     assert result.exit_code == 0
     cfg = config.load()
     assert cfg.vault == vault
+
+
+def test_config_vault_missing() -> None:
+    """Test that command with no vault fail."""
+    result = runner.invoke(cli.app, "config --vault missing-dir")
+    assert result.exit_code != 0
+    assert "missing-dir" in result.stdout
+
+
+def test_config_tags_note_missing() -> None:
+    """Test that command with no vault fail."""
+    result = runner.invoke(cli.app, "config --tags-note missing-dir")
+    assert result.exit_code != 0
+    assert "missing-dir" in result.stdout
 
 
 def test_note_list() -> None:

@@ -21,12 +21,14 @@ class Config:
     tags_note: Path = Path("meta") / Path("Tags")
     blog: Optional[Path] = None
 
+    def json(self) -> str:
+        """Return config as JSON string."""
+        return json.dumps(self, indent=4, default=pydantic_encoder)
+
     def dump(self) -> None:
         """Write config to config file."""
         CONFIG_PATH.parent.mkdir(parents=True, exist_ok=True)
-        CONFIG_PATH.write_text(
-            json.dumps(self, indent=4, default=pydantic_encoder), encoding="utf-8"
-        )
+        CONFIG_PATH.write_text(self.json(), encoding="utf-8")
 
 
 def load() -> Config:
