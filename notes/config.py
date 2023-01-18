@@ -23,6 +23,7 @@ class Config:
 
     def dump(self) -> None:
         """Write config to config file."""
+        CONFIG_PATH.parent.mkdir(parents=True, exist_ok=True)
         CONFIG_PATH.write_text(
             json.dumps(self, indent=4, default=pydantic_encoder), encoding="utf-8"
         )

@@ -27,6 +27,16 @@ templates = Environment(
 console = Console()
 
 
+def set_vault(ctx: typer.Context, param: typer.CallbackParam, vault: Path) -> Path:
+    """Register vault parameter."""
+    if ctx.resilient_parsing:
+        return vault
+    if not vault.is_dir():
+        raise typer.BadParameter(f"Vault '{vault}' does not exist.")
+    cfg.vault = vault
+    return vault
+
+
 def get_vault() -> Vault:
     """Create new vault from config values."""
     return Vault(cfg.vault, tags_note=cfg.tags_note)
@@ -60,10 +70,12 @@ PatternArg = typer.Argument(
 def main(
     vault: Path = typer.Option(  # noqa: B008
         cfg.vault,
+        is_eager=True,
         prompt=not cfg.vault,
         exists=True,
         file_okay=False,
         help="Vault directory containing notes. Specify at least once.",
+        callback=set_vault,
     ),
     tags_note: Path = typer.Option(  # noqa: B008
         cfg.tags_note,
@@ -74,7 +86,6 @@ def main(
     ),
 ) -> None:
     """Initialize global config."""
-    cfg.vault = vault
     cfg.tags_note = tags_note
     cfg.dump()
 
