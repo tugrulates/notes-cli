@@ -27,7 +27,12 @@ templates = Environment(
 console = Console()
 
 
-def set_vault(ctx: typer.Context, param: typer.CallbackParam, vault: Path) -> Path:
+def get_vault() -> Vault:
+    """Create new vault from config values."""
+    return Vault(cfg.vault, tags_note=cfg.tags_note)
+
+
+def set_vault(ctx: typer.Context, vault: Path) -> Path:
     """Register vault parameter."""
     if ctx.resilient_parsing:
         return vault
@@ -35,11 +40,6 @@ def set_vault(ctx: typer.Context, param: typer.CallbackParam, vault: Path) -> Pa
         raise typer.BadParameter(f"Vault '{vault}' does not exist.")
     cfg.vault = vault
     return vault
-
-
-def get_vault() -> Vault:
-    """Create new vault from config values."""
-    return Vault(cfg.vault, tags_note=cfg.tags_note)
 
 
 def complete_note(incomplete: str) -> Iterator[str]:
@@ -51,7 +51,7 @@ def complete_note(incomplete: str) -> Iterator[str]:
         yield str(note.name).replace(" ", "\\ ")
 
 
-def validate_note(ctx: typer.Context, param: typer.CallbackParam, note: Path) -> Path:
+def validate_note(ctx: typer.Context, note: Path) -> Path:
     """Validate note parameter."""
     if ctx.resilient_parsing:
         return note
