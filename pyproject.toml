@@ -24,7 +24,7 @@ dependencies = [
   "markdown-it-py[plugins]==2.1.0",
   "pydantic==1.10.4",
   "PyYAML==6.0",
-  "rich==12.6.0",
+  "rich==13.2.0",
   "typer[all]==0.7.0",
 ]
 
